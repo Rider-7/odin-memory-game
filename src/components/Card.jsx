@@ -2,8 +2,8 @@ import './Card.css';
 
 export default function Card({ children }) {
   return (
-    <div className="card">
+    <button type="button" className="card">
       {children}
-    </div>
+    </button>
   );
 }
