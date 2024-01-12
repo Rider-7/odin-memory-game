@@ -1,0 +1,37 @@
+.game {
+  width: 80%;
+  padding: 20px;
+}
+
+.title {
+  margin: 0;
+  padding: 0;
+
+  text-align: center;
+}
+
+.scoreboard {
+  margin-left: 30px;
+}
+
+.scoreboard__best {
+  margin: 0;
+  padding: 0;
+
+  margin-block: 10px;
+
+}
+
+.scoreboard__current {
+  margin: 0;
+  padding: 0;
+  margin-block: 10px;
+}
+
+.gameboard {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(70px, 1fr));
+  grid-template-rows: auto;
+  gap: 20px;
+  justify-content: center;
+}
