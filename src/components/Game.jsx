@@ -1,58 +1,56 @@
 import { useState, useRef } from 'react';
-
+import useColourScheme from './useColourScheme';
 import Card from './Card';
 import './Game.css';
 
-const coloursJSON = {
-  red: false,
-  blue: false,
-  yellow: false,
-  green: false,
-};
-
-// Durstenfeld Shuffle. Mutates.
 function shuffle(array) {
-  const ptr = array;
+  const ptr = [...array];
   for (let i = ptr.length - 1; i > 0; i -= 1) {
     const random = Math.floor(Math.random() * (i - 1));
     const temp = ptr[i];
     ptr[i] = ptr[random];
     ptr[random] = temp;
   }
+  return ptr;
 }
 
-// Implement API JSON processing.
-// function processJSON(json) {
-// }
+function Deck(scheme, order, onClick) {
+  return order.map((hex) => (
+    <Card key={scheme[hex].hex} onClick={onClick} value={scheme[hex].hex}>
+      <span>{scheme[hex].name}</span>
+    </Card>
+  ));
+}
 
 export default function Gameboard() {
   const [current, setCurrent] = useState(0);
   const [best, setBest] = useState(0);
-  const coloursObj = useRef({ ...coloursJSON });
-  const coloursArr = useRef(Object.keys(coloursJSON));
+  const currentScheme = useRef(null);
+
+  const { scheme, isLoading, error } = useColourScheme();
 
   function handleOnClick(e) {
-    const colour = e.currentTarget.value;
-
-    if (coloursObj.current[colour] === false) {
-      coloursObj.current[colour] = true;
+    const hex = e.currentTarget.value;
+    console.log(hex);
+    if (currentScheme.current[hex].isClicked === false) {
+      currentScheme.current[hex].isClicked = true;
       setCurrent(current + 1);
     } else {
-      setBest(current);
+      if (current > best) setBest(current);
       setCurrent(0);
-      coloursObj.current = { ...coloursJSON };
+      currentScheme.current = { ...scheme };
     }
   }
-  // Implement victory screen.
-  if (current === coloursArr.current.length) console.log('You Win!');
 
+  let Template;
+  if (error) Template = <p>An error has occured.</p>;
+  if (isLoading) Template = <p>Loading...</p>;
+  else {
+    if (currentScheme.current === null) currentScheme.current = scheme;
+    const order = shuffle(Object.keys(currentScheme.current));
 
-  shuffle(coloursArr.current);
-  const Cards = coloursArr.current.map((colour) => (
-    <Card key={colour} onClick={handleOnClick} value={colour}>
-      <span>{colour}</span>
-    </Card>
-  ));
+    Template = Deck(currentScheme.current, order, handleOnClick);
+  }
 
   return (
     <div className="game">
@@ -62,7 +60,7 @@ export default function Gameboard() {
         <h2 className="scoreboard__current">{`Score: ${current}`}</h2>
       </div>
       <div className="gameboard">
-        {Cards}
+        {Template}
       </div>
     </div>
   );
