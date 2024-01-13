@@ -11,7 +11,7 @@
 
   cursor: pointer;
 
-  transition: 300ms;
+  transition: 200ms;
 }
 
 .card:hover:enabled {
@@ -24,5 +24,8 @@
 .card:active:enabled {
   border-color: #2E3D8F;
   background-color: #2E3D8F;
-  transition: 50ms;
+  transition: 30ms;
+
+  transform:translate(0px, 4px);
+  box-shadow: 0px 0px 0px 0px;
 }
