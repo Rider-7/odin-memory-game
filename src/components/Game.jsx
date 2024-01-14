@@ -3,42 +3,58 @@ import useColourScheme from './useColourScheme';
 import Card from './Card';
 import './Game.css';
 
-function shuffle(array) {
-  const ptr = [...array];
-  for (let i = ptr.length - 1; i > 0; i -= 1) {
-    const random = Math.floor(Math.random() * (i - 1));
-    const temp = ptr[i];
-    ptr[i] = ptr[random];
-    ptr[random] = temp;
+function ShuffledDeck(scheme, onClick) {
+  function shuffle(array) {
+    const ptr = [...array];
+    for (let i = ptr.length - 1; i > 0; i -= 1) {
+      const random = Math.floor(Math.random() * (i - 1));
+      const temp = ptr[i];
+      ptr[i] = ptr[random];
+      ptr[random] = temp;
+    }
+    return ptr;
   }
-  return ptr;
+
+  const Deck = [];
+  const order = shuffle(Object.keys(scheme));
+  order.forEach((idx) => {
+    Deck.push((
+      <Card key={idx} onClick={onClick} value={scheme[idx].hex} dataKey={idx}>
+        <span>{scheme[idx].hex}</span>
+      </Card>
+    ));
+  });
+  return Deck;
 }
 
-function Deck(scheme, order, onClick) {
-  return order.map((hex) => (
-    <Card key={scheme[hex].hex} onClick={onClick} value={scheme[hex].hex}>
-      <span>{scheme[hex].name}</span>
-    </Card>
+function SchemeJSONProcessor(json) {
+  const arr = json.colors;
+  const scheme = arr.map((colour) => (
+    {
+      hex: colour.hex.value,
+      name: colour.name.value,
+      isClicked: false,
+    }
   ));
+  return scheme;
 }
 
 export default function Gameboard() {
   const [current, setCurrent] = useState(0);
   const [best, setBest] = useState(0);
-  const currentScheme = useRef(null);
+  const scheme = useRef(null);
 
-  const { scheme, isLoading, error } = useColourScheme();
+  const { nextScheme, isLoading, error } = useColourScheme('0047AB', 'quad', 22, SchemeJSONProcessor);
 
   function handleOnClick(e) {
-    const hex = e.currentTarget.value;
-    console.log(hex);
-    if (currentScheme.current[hex].isClicked === false) {
-      currentScheme.current[hex].isClicked = true;
+    const idx = e.currentTarget.dataset.key;
+    if (scheme.current[idx].isClicked === false) {
+      scheme.current[idx].isClicked = true;
       setCurrent(current + 1);
     } else {
       if (current > best) setBest(current);
       setCurrent(0);
-      currentScheme.current = { ...scheme };
+      scheme.current = { ...nextScheme };
     }
   }
 
@@ -46,10 +62,8 @@ export default function Gameboard() {
   if (error) Template = <p>An error has occured.</p>;
   if (isLoading) Template = <p>Loading...</p>;
   else {
-    if (currentScheme.current === null) currentScheme.current = scheme;
-    const order = shuffle(Object.keys(currentScheme.current));
-
-    Template = Deck(currentScheme.current, order, handleOnClick);
+    if (scheme.current === null) scheme.current = nextScheme;
+    Template = ShuffledDeck(scheme.current, handleOnClick);
   }
 
   return (

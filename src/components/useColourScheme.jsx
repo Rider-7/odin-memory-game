@@ -1,34 +1,30 @@
 import { useEffect, useState, useRef } from 'react';
 
-// NOTE: Be careful of difference in spelling of 'colour'.
-export default function useColourScheme(hex = '0047AB', mode = 'analogic') {
+// NOTE: Be careful of difference in spelling of 'colour' and 'color'.
+export default function useColourScheme(hex, mode, count, JSONProcessor) {
   const [isLoading, setIsLoading] = useState('true');
   const [error, setError] = useState(null);
-  const [scheme, setScheme] = useState(null);
-  const schemeURL = useRef(`https://www.thecolorapi.com/scheme?hex=${hex}&format=json&mode=${mode}&count=6`);
+  const [nextScheme, setNextScheme] = useState(null);
+  const schemeURL = useRef(`https://www.thecolorapi.com/scheme?hex=${hex}&format=json&mode=${mode}&count=${count}`);
+
+  function responseHandler(response) {
+    if (response.status >= 400) {
+      throw new Error(`Error Code: ${response.status} - ${response.statusText}}`);
+    }
+    return response.json();
+  }
 
   useEffect(() => {
+    console.log('Effect Runs.');
     fetch(schemeURL.current, { mode: 'cors' })
-      .then((response) => {
-        if (response.status >= 400) {
-          throw new Error(`Error Code: ${response.status} - ${response.statusText}}`);
-        }
-        return response.json();
-      })
+      .then((response) => responseHandler(response))
       .then((json) => {
-        const arr = json.colors;
-        const obj = Object.fromEntries(
-          arr.map((colour) => [colour.hex.value, {
-            hex: colour.hex.value,
-            name: colour.name.value,
-            isClicked: false,
-          }]),
-        );
-        setScheme(obj);
+        const obj = JSONProcessor(json);
+        setNextScheme(obj);
       })
       .catch((e) => setError(e))
       .finally(() => setIsLoading(false));
-  }, []);
+  }, [JSONProcessor]);
 
-  return { scheme, isLoading, error };
+  return { nextScheme, isLoading, error };
 }
