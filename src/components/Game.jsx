@@ -1,3 +1,9 @@
+/* Possible optimisation:
+    Current implementation is forced to use structuredClone() to deep copy the next scheme,
+    which is an array of objects.
+    Maybe re-factor to use an array of arrays instead?
+*/
+
 import { useState, useRef } from 'react';
 import useColourScheme from './useColourScheme';
 import Card from './Card';
@@ -27,15 +33,26 @@ function ShuffledDeck(scheme, onClick) {
   return Deck;
 }
 
-function SchemeJSONProcessor(json) {
+function SchemeJSONProcessor(useAPI, json) {
   const arr = json.colors;
-  const scheme = arr.map((colour) => (
-    {
-      hex: colour.hex.value,
-      name: colour.name.value,
-      isClicked: false,
-    }
-  ));
+  let scheme;
+  if (useAPI) {
+    scheme = arr.map((colour) => (
+      {
+        hex: colour.hex.value,
+        name: colour.name.value,
+        isClicked: false,
+      }
+    ));
+  } else {
+    scheme = arr.map((colour) => (
+      {
+        hex: colour.hex,
+        name: colour.name,
+        isClicked: false,
+      }
+    ));
+  }
   return scheme;
 }
 
@@ -43,8 +60,9 @@ export default function Gameboard() {
   const [current, setCurrent] = useState(0);
   const [best, setBest] = useState(0);
   const scheme = useRef(null);
+  const useAPI = useRef(false);
 
-  const { nextScheme, isLoading, error } = useColourScheme('0047AB', 'quad', 22, SchemeJSONProcessor);
+  const { nextScheme, isLoading, error } = useColourScheme(useAPI.current, '0047AB', 'quad', 22, SchemeJSONProcessor);
 
   function handleOnClick(e) {
     const idx = e.currentTarget.dataset.key;
@@ -54,7 +72,7 @@ export default function Gameboard() {
     } else {
       if (current > best) setBest(current);
       setCurrent(0);
-      scheme.current = { ...nextScheme };
+      scheme.current = structuredClone(nextScheme);
     }
   }
 
@@ -62,7 +80,8 @@ export default function Gameboard() {
   if (error) Template = <p>An error has occured.</p>;
   if (isLoading) Template = <p>Loading...</p>;
   else {
-    if (scheme.current === null) scheme.current = nextScheme;
+    if (scheme.current === null) scheme.current = structuredClone(nextScheme);
+
     Template = ShuffledDeck(scheme.current, handleOnClick);
   }
 
