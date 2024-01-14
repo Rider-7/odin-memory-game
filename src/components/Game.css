@@ -1,6 +1,10 @@
 .game {
   width: 80%;
   padding: 20px;
+
+  background-color: #adb6da4a;
+  border-radius: 8px;
+  border: 2px solid black;
 }
 
 .title {
