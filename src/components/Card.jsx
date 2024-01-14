@@ -5,7 +5,7 @@ export default function Card(props) {
     children,
     onClick,
     value,
-    dataKey
+    dataKey,
   } = props;
 
   return (
