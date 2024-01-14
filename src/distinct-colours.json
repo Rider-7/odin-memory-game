@@ -1,0 +1,107 @@
+{
+  "colors": [
+    {
+      "hex": "#e6194B",
+      "name": "Red",
+      "isClicked": false
+    },
+    {
+      "hex": "#3cb44b",
+      "name": "Green",
+      "isClicked": false
+    },
+    {
+      "hex": "#ffe119",
+      "name": "Yellow",
+      "isClicked": false
+    },
+    {
+      "hex": "#4363d8",
+      "name": "Blue",
+      "isClicked": false
+    },
+    {
+      "hex": "#f58231",
+      "name": "Orange",
+      "isClicked": false
+    },
+    {
+      "hex": "#911eb4",
+      "name": "Purple",
+      "isClicked": false
+    },
+    {
+      "hex": "#42d4f4",
+      "name": "Cyan",
+      "isClicked": false
+    },
+    {
+      "hex": "#f032e6",
+      "name": "Magenta",
+      "isClicked": false
+    },
+    {
+      "hex": "#bfef45",
+      "name": "Lime",
+      "isClicked": false
+    },
+    {
+      "hex": "#fabed4",
+      "name": "Pink",
+      "isClicked": false
+    },
+    {
+      "hex": "#469990",
+      "name": "Teal",
+      "isClicked": false
+    },
+    {
+      "hex": "#dcbeff",
+      "name": "Lavender",
+      "isClicked": false
+    },
+    {
+      "hex": "#9A6324",
+      "name": "Brown",
+      "isClicked": false
+    },
+    {
+      "hex": "#fffac8",
+      "name": "Beige",
+      "isClicked": false
+    },
+    {
+      "hex": "#800000",
+      "name": "Maroon",
+      "isClicked": false
+    },    {
+      "hex": "#aaffc3",
+      "name": "Mint",
+      "isClicked": false
+    },    {
+      "hex": "#808000",
+      "name": "Olive",
+      "isClicked": false
+    },    {
+      "hex": "#ffd8b1",
+      "name": "Apricot",
+      "isClicked": false
+    },    {
+      "hex": "#000075",
+      "name": "Navy",
+      "isClicked": false
+    },    {
+      "hex": "#a9a9a9",
+      "name": "Grey",
+      "isClicked": false
+    },    {
+      "hex": "#ffffff",
+      "name": "White",
+      "isClicked": false
+    },    {
+      "hex": "#000000",
+      "name": "Black",
+      "isClicked": false
+    }
+  ]
+}
