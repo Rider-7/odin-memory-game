@@ -26,7 +26,7 @@ function ShuffledDeck(scheme, onClick) {
   order.forEach((idx) => {
     Deck.push((
       <Card key={idx} onClick={onClick} value={scheme[idx].hex} dataKey={idx}>
-        <span>{scheme[idx].hex}</span>
+        <span>{scheme[idx].name}</span>
       </Card>
     ));
   });
