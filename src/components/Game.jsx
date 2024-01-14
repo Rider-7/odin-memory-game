@@ -7,7 +7,7 @@
 import { useState, useRef } from 'react';
 import useColourScheme from './useColourScheme';
 import Card from './Card';
-import './Game.css';
+import '../styles/Game.css';
 
 function ShuffledDeck(scheme, onClick) {
   function shuffle(array) {
